@@ -1,4 +1,3 @@
-import React from 'react'; 
 
 export default function Random(){
         const secretNumber = Math.floor(Math.random()*100)+1;

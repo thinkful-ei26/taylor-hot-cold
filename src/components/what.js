@@ -1,11 +1,10 @@
 import React from 'react'; 
 
 export default function What(props){
-    let gameInstructions=''
+    let gameInstructions='';
     
     if(props.formVisible){
        gameInstructions = 
-        
             <div className="content">
                 <h3>What do I do?</h3>
                 <div>
@@ -19,7 +18,6 @@ export default function What(props){
                     <a onClick= {props.toggle}className="close" href="#">Got It!</a>
                 </div>
             </div>
-        
         ;
     }
     {

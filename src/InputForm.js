@@ -1,10 +1,10 @@
 import React from 'react';
-import Hint from './hotOrCold';
-import Guess from './userGuess';
-import Random from './randomNumber'
-import NewGame from './newGame';
-import WhatLink from './whatLink'; 
-import What from './what'; 
+import Hint from './components/Hint';
+import Guess from './components/Guess';
+import Random from './components/Random'
+import NewGame from './components/newGame';
+import WhatLink from './components/whatLink'; 
+import What from './components/what'; 
 
 export default class InputForm extends React.Component {
     constructor(props){
@@ -29,7 +29,7 @@ export default class InputForm extends React.Component {
         const value = this.state.value; 
         let guessesCopy = this.state.guesses.slice(); 
         guessesCopy.push(value);
-        this.setState({value:'', lastGuess: value, guesses: guessesCopy});
+        this.setState({value:'', lastGuess: value, guesses: guessesCopy, count:guessesCopy.length});
         console.log(this.state.guesses); 
         console.log(value); 
         return {value}; 
@@ -40,13 +40,15 @@ export default class InputForm extends React.Component {
             value:'', 
             secretNumber: Random(),
             lastGuess: '', 
-            guesses:[]
+            guesses:[], 
+            count:0
         })
     }
     toggleForm(){
         console.log('Toggle Activated!')
-        this.state.formVisible = !this.state.formVisible; 
-        this.setState({formVisible:this.state.formVisible})
+        let value = this.state.formVisible;
+            value = !value 
+        this.setState({formVisible:value})
     }
     whatLink(){
         console.log('WhatLink has been pressed!');
@@ -58,18 +60,13 @@ export default class InputForm extends React.Component {
     render(){
 
        let guessesToRender = this.state.guesses.map(e => {
-           return (<div className = 'guessDisplay'>{e}</div>)
+           return (<li className = 'guessDisplay'>{e}</li>)
        });
         return (
             <div className = 'parent'>
                 <title>Hot || Cold</title>
-        
                 <meta charSet="utf-8"/>
-        
-                
                 <header> 
-        
-        
                     <nav> 
                         <ul className="clearfix">
                             <WhatLink whatLink= {this.whatLink} />
@@ -79,33 +76,22 @@ export default class InputForm extends React.Component {
                     <div>
                     <What formVisible={this.state.formVisible} toggle={this.toggleForm} />
                     </div>
-                    
-                    
-        
-
-        
-        
-                    <h1>HOT or COLD</h1>
-        
+                    <h1 className='title'>HOT or COLD</h1>
                 </header>
         
                 <section className="game"> 
-                    
                     <div className = 'hint'>
                     <Hint secretNumber ={this.state.secretNumber} Guess ={this.state.lastGuess}/>
                     </div>
                     <div className= 'inputForm'>
                     <Guess handleSubmit= {this.handleSubmit} handleChange= {this.handleChange} value={this.state.value}/>
                     </div>
-                      <p>Guess #<span id="count">{this.state.count}</span>!</p>
-                        <div className='guessInfo'>
-                        {guessesToRender}
-                        </div>
-                    <ul id="guessList" className="guessBox clearfix">   
+                      <p id="count">Guess #<span >{this.state.guesses.length}</span>!</p>
+                    <ul id="guessList" className="guessInfo">  
+                    {guessesToRender} 
                     </ul>
-                </section>
-            
+                </section>            
             </div>
-            )
+            );
     }
 }
