@@ -2,16 +2,24 @@ import React from 'react';
 import Hint from './hotOrCold';
 import Guess from './userGuess';
 import Random from './randomNumber'
+import NewGame from './newGame';
+import WhatLink from './whatLink'; 
+import What from './what'; 
+
 export default class InputForm extends React.Component {
     constructor(props){
         super(props); 
         this.state = {value:'', 
         secretNumber: Random(), 
         lastGuess: '', 
-        guesses: []
+        guesses: [], 
+        formVisible: false
     }
         this.handleChange = this.handleChange.bind(this); 
         this.handleSubmit = this.handleSubmit.bind(this); 
+        this.newGame = this.newGame.bind(this); 
+        this.whatLink = this.whatLink.bind(this); 
+        this.toggleForm = this.toggleForm.bind(this); 
     }
     handleChange(e){
         this.setState({value: e.target.value}); 
@@ -25,9 +33,30 @@ export default class InputForm extends React.Component {
         console.log(this.state.guesses); 
         console.log(value); 
         return {value}; 
+    } 
+    newGame(){
+        console.log('new game has been pressed!');
+        this.setState({
+            value:'', 
+            secretNumber: Random(),
+            lastGuess: '', 
+            guesses:[]
+        })
+    }
+    toggleForm(){
+        console.log('Toggle Activated!')
+        this.state.formVisible = !this.state.formVisible; 
+        this.setState({formVisible:this.state.formVisible})
+    }
+    whatLink(){
+        console.log('WhatLink has been pressed!');
+        this.toggleForm();
+        console.log(this.state.formVisible);
     }
 
+
     render(){
+
        let guessesToRender = this.state.guesses.map(e => {
            return (<div className = 'guessDisplay'>{e}</div>)
        });
@@ -43,27 +72,17 @@ export default class InputForm extends React.Component {
         
                     <nav> 
                         <ul className="clearfix">
-                            <li><a className="what" href="#">What ?</a></li>
-                            <li><a className="new" href="#">+ New Game</a></li>
+                            <WhatLink whatLink= {this.whatLink} />
+                            <NewGame newGame= {this.newGame} />
                         </ul>
-                    </nav>
+                    </nav> 
+                    <div>
+                    <What formVisible={this.state.formVisible} toggle={this.toggleForm} />
+                    </div>
+                    
                     
         
-                    <div className="overlay" id="modal">
-                        <div className="content">
-                            <h3>What do I do?</h3>
-                            <div>
-                                <p>This is a Hot or Cold Number Guessing Game. The game goes like this: </p>
-                                <ul>
-                                    <li>1. I pick a <strong>random secret number</strong> between 1 to 100 and keep it hidden.</li>
-                                    <li>2. You need to <strong>guess</strong> until you can find the hidden secret number.</li>
-                                    <li>3. You will <strong>get feedback</strong> on how close ("hot") or far ("cold") your guess is.</li>
-                                </ul>
-                                <p>So, Are you ready?</p>
-                                <a className="close" href="#">Got It!</a>
-                            </div>
-                        </div>
-                    </div>
+
         
         
                     <h1>HOT or COLD</h1>
@@ -82,10 +101,8 @@ export default class InputForm extends React.Component {
                         <div className='guessInfo'>
                         {guessesToRender}
                         </div>
-                    <ul id="guessList" className="guessBox clearfix">
-        
+                    <ul id="guessList" className="guessBox clearfix">   
                     </ul>
-        
                 </section>
             
             </div>
