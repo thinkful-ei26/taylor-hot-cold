@@ -1,6 +1,9 @@
 import React from 'react'; 
+import { connect } from 'react-redux'
+import { WhatThe } from '../redux/reducer';
 
-export default function What(props){
+function What(props){
+    console.log(props); 
     let gameInstructions='';
     
     if(props.formVisible){
@@ -15,7 +18,7 @@ export default function What(props){
                         <li>3. You will <strong>get feedback</strong> on how close ("hot") or far ("cold") your guess is.</li>
                     </ul>
                     <p>So, Are you ready?</p>
-                    <a onClick= {props.toggle}className="close" href="#">Got It!</a>
+                    <a onClick= {props.WhatThe} className="close" href="#">Got It!</a>
                 </div>
             </div>
         ;
@@ -24,3 +27,10 @@ export default function What(props){
         return( <div className="overlay" id="modal">{gameInstructions}</div> ); 
     }
 }
+
+function mapStateToProps(state){
+    return {
+        formVisible: state.formVisible
+    }
+}
+export default connect(mapStateToProps, {WhatThe})(What);

@@ -1,8 +1,12 @@
 import React from 'react';
+import { NewGameToggle } from '../redux/reducer'; 
+import { connect } from 'react-redux'; 
 
-export default function NewGame(props){
-    
+function NewGame(props){
+    console.log(props); 
     return(
-        <li><a onClick= {props.newGame} className="new" href="#">+ New Game</a></li>
+        <li><a onClick= {props.NewGameToggle} className="new" href="#">+ New Game</a></li>
     );
 }
+
+export default connect(null, { NewGameToggle })(NewGame); 

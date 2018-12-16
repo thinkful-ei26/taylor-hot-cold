@@ -1,7 +1,10 @@
 import React from 'react'
+import { WhatThe } from '../redux/reducer'; 
+import { connect } from 'react-redux';
 
-export default function WhatLink(props){
+function WhatLink(props){
     return(
-        <li><a onClick={props.whatLink} className="what" href="#">What ?</a></li>
+        <li><a onClick={props.WhatThe} className="what" href="#">What ?</a></li>
     );
 }
+export default connect(null, {WhatThe})(WhatLink); 

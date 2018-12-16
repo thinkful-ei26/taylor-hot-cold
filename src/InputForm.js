@@ -1,67 +1,29 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Hint from './components/Hint';
 import Guess from './components/Guess';
-import Random from './components/Random'
 import NewGame from './components/newGame';
 import WhatLink from './components/whatLink'; 
 import What from './components/what'; 
+import { connect } from 'react-redux'; 
+import { WhatThe, HandleSubmitRedux } from './redux/reducer'; 
 
-export default class InputForm extends React.Component {
+class InputForm extends Component {
     constructor(props){
         super(props); 
-        this.state = {value:'', 
-        secretNumber: Random(), 
-        lastGuess: '', 
-        guesses: [], 
-        formVisible: false
-    }
-        this.handleChange = this.handleChange.bind(this); 
         this.handleSubmit = this.handleSubmit.bind(this); 
-        this.newGame = this.newGame.bind(this); 
-        this.whatLink = this.whatLink.bind(this); 
-        this.toggleForm = this.toggleForm.bind(this); 
     }
-    handleChange(e){
-        this.setState({value: e.target.value}); 
-    }
+
     handleSubmit(e){
         e.preventDefault();
-        const value = this.state.value; 
-        let guessesCopy = this.state.guesses.slice(); 
-        guessesCopy.push(value);
-        this.setState({value:'', lastGuess: value, guesses: guessesCopy, count:guessesCopy.length});
-        console.log(this.state.guesses); 
-        console.log(value); 
-        return {value}; 
-    } 
-    newGame(){
-        console.log('new game has been pressed!');
-        this.setState({
-            value:'', 
-            secretNumber: Random(),
-            lastGuess: '', 
-            guesses:[], 
-            count:0
-        })
-    }
-    toggleForm(){
-        console.log('Toggle Activated!')
-        let value = this.state.formVisible;
-            value = !value 
-        this.setState({formVisible:value})
-    }
-    whatLink(){
-        console.log('WhatLink has been pressed!');
-        this.toggleForm();
-        console.log(this.state.formVisible);
-    }
+        const value = this.props.value;
+        this.props.HandleSubmitRedux(value); 
 
+    } 
 
     render(){
-
-       let guessesToRender = this.state.guesses.map(e => {
-           return (<li className = 'guessDisplay'>{e}</li>)
-       });
+       const guessesList = this.props.guesses.map((guess, i) => {
+           return <li className = 'guessesList' key= {i}>{guess}</li>
+        })
         return (
             <div className = 'parent'>
                 <title>Hot || Cold</title>
@@ -69,29 +31,37 @@ export default class InputForm extends React.Component {
                 <header> 
                     <nav> 
                         <ul className="clearfix">
-                            <WhatLink whatLink= {this.whatLink} />
-                            <NewGame newGame= {this.newGame} />
+                            <WhatLink />
+                            <NewGame />
                         </ul>
                     </nav> 
                     <div>
-                    <What formVisible={this.state.formVisible} toggle={this.toggleForm} />
+                    <What />
                     </div>
                     <h1 className='title'>HOT or COLD</h1>
                 </header>
         
                 <section className="game"> 
                     <div className = 'hint'>
-                    <Hint secretNumber ={this.state.secretNumber} Guess ={this.state.lastGuess}/>
+                    <Hint />
                     </div>
                     <div className= 'inputForm'>
-                    <Guess handleSubmit= {this.handleSubmit} handleChange= {this.handleChange} value={this.state.value}/>
+                    <Guess handleSubmit={this.handleSubmit} />
                     </div>
-                      <p id="count">Guess #<span >{this.state.guesses.length}</span>!</p>
+                      <p id="count">Guess #<span >{this.props.guesses.length}</span>!</p>
                     <ul id="guessList" className="guessInfo">  
-                    {guessesToRender} 
+                    {guessesList} 
                     </ul>
                 </section>            
             </div>
             );
     }
 }
+    function mapStateToProps(state){
+        return {
+            formVisible: state.formVisible, 
+            guesses: state.guesses, 
+            value: state.value
+        }
+    }
+    export default connect(mapStateToProps, {WhatThe, HandleSubmitRedux})(InputForm)
